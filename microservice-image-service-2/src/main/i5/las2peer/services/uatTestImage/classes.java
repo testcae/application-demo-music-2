@@ -10,15 +10,6 @@ public class classes {
 
     public image() {}
     
-    private String imageName;
-
-    public void setimageName(String setValue) {
-        this.imageName = setValue;
-    }
-
-    public String getimageName() {
-        return this.imageName;
-    }
     private int imageId;
 
     public void setimageId(int setValue) {
@@ -27,6 +18,15 @@ public class classes {
 
     public int getimageId() {
         return this.imageId;
+    }
+    private String imageName;
+
+    public void setimageName(String setValue) {
+        this.imageName = setValue;
+    }
+
+    public String getimageName() {
+        return this.imageName;
     }
     private String imageUrl;
 
@@ -41,8 +41,8 @@ public class classes {
     public JSONObject toJSON() {
 
         JSONObject jo = new JSONObject();
-        jo.put("imageName", this.imageName); 
         jo.put("imageId", this.imageId); 
+        jo.put("imageName", this.imageName); 
         jo.put("imageUrl", this.imageUrl); 
 
         return jo;
@@ -50,8 +50,8 @@ public class classes {
 
     public void fromJSON(String jsonString) throws ParseException {
         JSONObject jsonObject = (JSONObject) JSONValue.parseWithException(jsonString);
-        this.imageName = (String) jsonObject.get("imageName"); 
         this.imageId = ((Long) jsonObject.get("imageId")).intValue(); 
+        this.imageName = (String) jsonObject.get("imageName"); 
         this.imageUrl = (String) jsonObject.get("imageUrl"); 
 
     }

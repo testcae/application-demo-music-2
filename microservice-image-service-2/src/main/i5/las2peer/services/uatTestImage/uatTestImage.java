@@ -77,9 +77,9 @@ public class uatTestImage extends RESTService {
 
   @Api
   @SwaggerDefinition(
-      info = @Info(title = "image-service-2", version = "1",
-          description = "descriptiom of the service",
-          termsOfService = "you have to sell your soul to us in order to use the service.",
+      info = @Info(title = "image-service-2", version = "1.0",
+          description = "Service to save and get image for music list",
+          termsOfService = "LICENSE.txt",
           contact = @Contact(name = "Melisa Cecilia", email = "CAEAddress@gmail.com") ,
           license = @License(name = "BSD",
               url = "https://github.com/testcae/microservice-image-service-2/blob/master/LICENSE.txt") ) )
@@ -90,61 +90,12 @@ public class uatTestImage extends RESTService {
 
       /**
    * 
-   * postImage
-   *
-   * 
-   * @param imagePayload A description.. a JSONObject
-   * 
-   * @return Response 
-   * 
-   */
-  @POST
-  @Path("/image")
-  @Produces(MediaType.TEXT_PLAIN)
-  @Consumes(MediaType.TEXT_PLAIN)
-  @ApiResponses(value = {
-       @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "postImageResponse")
-  })
-  @ApiOperation(value = "postImage", notes = " ")
-  public Response postImage(String imagePayload) {
-   classes.image payloadimagePayloadObject = new classes().new image();
-   try { 
-       payloadimagePayloadObject.fromJSON(imagePayload);
-   } catch (Exception e) { 
-       e.printStackTrace();
-       JSONObject result = new JSONObject();
-       return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).entity("Cannot convert json to object").build();
-   }
-    try { 
-        Connection conn = service.dbm.getConnection();
-        PreparedStatement query = conn.prepareStatement(
-          "INSERT INTO uatTest.tblImage(imageName, imageUrl) VALUES(?,?) ");
-        query.setString(1, payloadimagePayloadObject.getimageName());
-        query.setString(2, payloadimagePayloadObject.getimageUrl());
-        query.executeUpdate();
-
-        // get id of the new added image
-        ResultSet generatedKeys = query.getGeneratedKeys();
-        if (generatedKeys.next()) {
-          return Response.status(HttpURLConnection.HTTP_OK).entity(generatedKeys.getLong(1)).build();
-        } else {
-          return Response.status(HttpURLConnection.HTTP_OK).entity(0).build();
-        }
-    } catch(Exception e) {
-      e.printStackTrace();
-      return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).entity(0).build();
-    }
-
-  }
-
-  /**
-   * 
    * getImage
    *
    * 
    *
    * 
-   * @return Response A simple image service
+   * @return Response Response get image will return image list
    * 
    */
   @GET
@@ -152,7 +103,7 @@ public class uatTestImage extends RESTService {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.TEXT_PLAIN)
   @ApiResponses(value = {
-       @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "A simple image service")
+       @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Response get image will return image list")
   })
   @ApiOperation(value = "getImage", notes = " ")
   public Response getImage() {
@@ -178,6 +129,55 @@ public class uatTestImage extends RESTService {
       return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).entity(result.toJSONString()).build();
     }
 
+  }
+
+  /**
+   * 
+   * postImage
+   *
+   * 
+   * @param payloadPostImage Payload post image needs image object a JSONObject
+   * 
+   * @return Response Response post image, image id
+   * 
+   */
+  @POST
+  @Path("/image")
+  @Produces(MediaType.TEXT_PLAIN)
+  @Consumes(MediaType.TEXT_PLAIN)
+  @ApiResponses(value = {
+       @ApiResponse(code = HttpURLConnection.HTTP_OK, message = "Response post image, image id")
+  })
+  @ApiOperation(value = "postImage", notes = " ")
+  public Response postImage(String payloadPostImage) {
+   classes.image payloadpayloadPostImageObject = new classes().new image();
+   try { 
+       payloadpayloadPostImageObject.fromJSON(payloadPostImage);
+   } catch (Exception e) { 
+       e.printStackTrace();
+       JSONObject result = new JSONObject();
+       return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).entity("Cannot convert json to object").build();
+   }
+    // post image response
+try { 
+        Connection conn = service.dbm.getConnection();
+        PreparedStatement query = conn.prepareStatement(
+          "INSERT INTO uatTest.tblImage(imageName, imageUrl) VALUES(?,?) ");
+        query.setString(1, payloadpayloadPostImageObject.getimageName());
+        query.setString(2, payloadpayloadPostImageObject.getimageUrl());
+        query.executeUpdate();
+
+        // get id of the new added image
+        ResultSet generatedKeys = query.getGeneratedKeys();
+        if (generatedKeys.next()) {
+          return Response.status(HttpURLConnection.HTTP_OK).entity(generatedKeys.getLong(1)).build();
+        } else {
+          return Response.status(HttpURLConnection.HTTP_OK).entity(0).build();
+        }
+    } catch(Exception e) {
+      e.printStackTrace();
+      return Response.status(HttpURLConnection.HTTP_INTERNAL_ERROR).entity(0).build();
+    }
   }
 
 
